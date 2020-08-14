@@ -8,33 +8,29 @@ import (
 )
 
 func TestLoadFile(t *testing.T) {
-	fileTests := []struct {
-		path string
-	}{
-		{path: "testdata/sample.srt"},
+	validPaths := []string{
+		"testdata/sample.srt",
 	}
 
-	for _, file := range fileTests {
-		subtitle, err := LoadFile(file.path)
+	for _, path := range validPaths {
+		subtitle, err := LoadFile(path)
 
-		assert.Equal(t, subtitle, Subtitle{}, "should returns a subtitle")
+		assert.Equal(t, Subtitle{}, subtitle, "should returns a subtitle")
 		assert.Nil(t, err, "not returns error")
 	}
 }
 
 func TestInvalidLoadFile(t *testing.T) {
-	invalidFileTests := []struct {
-		path string
-	}{
-		{path: "testdata/invalid-path.srt"},
-		{path: "testdata/invalid-file.srt"},
+	invalidPaths := []string{
+		"testdata/invalid-path.srt",
+		"testdata/invalid-file.srt",
 	}
 
-	for _, file := range invalidFileTests {
-		subtitle, err := LoadFile(file.path)
+	for _, path := range invalidPaths {
+		subtitle, err := LoadFile(path)
 
 		assert.NotNil(t, err, "should returns a Error")
-		assert.EqualError(t, err, fmt.Sprintf("Invalid file: %s", file.path))
-		assert.Equal(t, subtitle, Subtitle{}, "should returns a empty subtitle")
+		assert.EqualError(t, err, fmt.Sprintf("Invalid file: %s", path))
+		assert.Equal(t, Subtitle{}, subtitle, "should returns a empty subtitle")
 	}
 }
