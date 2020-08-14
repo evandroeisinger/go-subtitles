@@ -10,7 +10,11 @@ import (
 func TestLoadFromFile(t *testing.T) {
 	filePath := "testdata/sample.srt"
 	expectedContent := utils.LoadFileContent(filePath)
-	expectedSubtitle := Subtitle{content: expectedContent}
+
+	expectedSubtitle := Subtitle{
+		content: expectedContent,
+		blocks:  []Block{},
+	}
 
 	subtitle, err := LoadFromFile(filePath)
 

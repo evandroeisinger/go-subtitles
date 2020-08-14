@@ -4,9 +4,17 @@ import (
 	"subtitles/utils"
 )
 
+// Block struct
+type Block struct {
+	lines   []string
+	startAt int
+	endAt   int
+}
+
 // Subtitle struct
 type Subtitle struct {
 	content string
+	blocks  []Block
 }
 
 // LoadFromFile method
@@ -25,6 +33,7 @@ func LoadFromFile(path string) (Subtitle, error) {
 
 	subtitle := Subtitle{
 		content: content,
+		blocks:  []Block{},
 	}
 
 	return subtitle, nil
