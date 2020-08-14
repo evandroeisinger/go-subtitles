@@ -11,15 +11,11 @@ func TestLoadFromFile(t *testing.T) {
 	filePath := "testdata/sample.srt"
 	expectedContent := utils.LoadFileContent(filePath)
 
-	expectedSubtitle := Subtitle{
-		content: expectedContent,
-		blocks:  []Block{},
-	}
-
 	subtitle, err := LoadFromFile(filePath)
 
-	assert.Equal(t, expectedSubtitle, subtitle, "should returns a subtitle")
-	assert.Nil(t, err, "not returns error")
+	assert.Equal(t, expectedContent, subtitle.content, "should have content loaded from file")
+	assert.Equal(t, 5, len(subtitle.blocks), "should have 5 blocks parsed")
+	assert.Nil(t, err, "should not returns errors")
 }
 
 func TestInvalidLoadFromFile(t *testing.T) {

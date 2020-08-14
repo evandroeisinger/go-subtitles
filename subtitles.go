@@ -31,10 +31,12 @@ func LoadFromFile(path string) (Subtitle, error) {
 		}
 	}
 
+	blocks, err := ParserForFile(path).parse(&content)
+
 	subtitle := Subtitle{
 		content: content,
-		blocks:  []Block{},
+		blocks:  blocks,
 	}
 
-	return subtitle, nil
+	return subtitle, err
 }
