@@ -8,9 +8,9 @@ import (
 type Subtitle struct{}
 
 // LoadFile method
-func LoadFile(file string) (Subtitle, error) {
-	if utils.FileExists(file) == false {
-		return Subtitle{}, &ErrInvalidFile{file: file}
+func LoadFile(path string) (Subtitle, error) {
+	if utils.FileExists(path) == false {
+		return Subtitle{}, &ErrInvalidFile{file: path}
 	}
 
 	return Subtitle{}, nil
