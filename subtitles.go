@@ -7,8 +7,8 @@ import (
 // Subtitle struct
 type Subtitle struct{}
 
-// LoadFile method
-func LoadFile(path string) (Subtitle, error) {
+// LoadFromFile method
+func LoadFromFile(path string) (Subtitle, error) {
 	if utils.FileExists(path) == false {
 		return Subtitle{}, &ErrInvalidFile{file: path}
 	}
