@@ -27,23 +27,10 @@ func TestLoadFileContent(t *testing.T) {
 	}{
 		{path: "testdata/empty.txt", content: ""},
 		{path: "testdata/lorem.txt", content: "Lorem ipsum dolor sit amet"},
+		{path: "testdata/invalid.txt", content: ""},
 	}
 
 	for _, file := range fileTests {
-		content, err := LoadFileContent(file.path)
-		assert.Equal(t, file.content, content)
-		assert.Nil(t, err)
-	}
-}
-
-func TestLoadInvalidFileContent(t *testing.T) {
-	filePaths := []string{
-		"testdata/invalid.txt",
-	}
-
-	for _, path := range filePaths {
-		content, err := LoadFileContent(path)
-		assert.Equal(t, "", content)
-		assert.NotNil(t, err)
+		assert.Equal(t, file.content, LoadFileContent(file.path))
 	}
 }

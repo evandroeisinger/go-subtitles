@@ -15,12 +15,12 @@ func FileExists(path string) bool {
 }
 
 // LoadFileContent method
-func LoadFileContent(path string) (string, error) {
+func LoadFileContent(path string) string {
 	b, err := ioutil.ReadFile(path)
 
 	if err != nil {
-		return "", err
+		return ""
 	}
 
-	return string(b), nil
+	return string(b)
 }
