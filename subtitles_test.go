@@ -7,18 +7,18 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLoadFromFile(t *testing.T) {
+func TestLoad(t *testing.T) {
 	filePath := "testdata/sample.srt"
 	expectedContent := utils.LoadFileContent(filePath)
 
-	subtitle, err := LoadFromFile(filePath)
+	subtitle, err := Load(filePath)
 
 	assert.Equal(t, expectedContent, subtitle.content, "should have content loaded from file")
 	assert.Equal(t, 5, len(subtitle.blocks), "should have 5 blocks parsed")
 	assert.Nil(t, err, "should not returns errors")
 }
 
-func TestInvalidLoadFromFile(t *testing.T) {
+func TestInvalidLoad(t *testing.T) {
 	invalidFiles := []struct {
 		path    string
 		message string
@@ -29,7 +29,7 @@ func TestInvalidLoadFromFile(t *testing.T) {
 	}
 
 	for _, file := range invalidFiles {
-		subtitle, err := LoadFromFile(file.path)
+		subtitle, err := Load(file.path)
 
 		assert.NotNil(t, err, "should returns a Error")
 		assert.EqualError(t, err, file.message)

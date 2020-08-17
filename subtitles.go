@@ -17,8 +17,8 @@ type Subtitle struct {
 	blocks  []Block
 }
 
-// LoadFromFile method
-func LoadFromFile(path string) (Subtitle, error) {
+// Load method
+func Load(path string) (Subtitle, error) {
 	if utils.FileExists(path) == false {
 		return Subtitle{}, &ErrInvalidFile{file: path}
 	}
