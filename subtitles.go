@@ -1,9 +1,5 @@
 package subtitles
 
-import (
-	"subtitles/utils"
-)
-
 // Block struct
 type Block struct {
 	lines   []string
@@ -19,24 +15,10 @@ type Subtitle struct {
 
 // Load method
 func Load(path string) (Subtitle, error) {
-	if utils.FileExists(path) == false {
-		return Subtitle{}, &ErrInvalidFile{file: path}
-	}
-
-	content := utils.LoadFileContent(path)
-	if len(content) == 0 {
-		return Subtitle{}, &ErrInvalidFileContent{
-			file:    path,
-			content: content,
-		}
-	}
-
-	blocks, err := ParserForFile(path).parse(&content)
-
 	subtitle := Subtitle{
-		content: content,
-		blocks:  blocks,
+		content: "",
+		blocks:  []Block{},
 	}
 
-	return subtitle, err
+	return subtitle, nil
 }
