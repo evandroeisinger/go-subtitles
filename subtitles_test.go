@@ -7,7 +7,7 @@ import (
 )
 
 func TestLoad(t *testing.T) {
-	subtitle, err := Load("testdata/sample.srt")
+	subtitle, err := Load("testdata/empty.srt")
 
 	assert.Equal(t, "", subtitle.content)
 	assert.Equal(t, 0, len(subtitle.blocks), "should have 0 blocks parsed")
