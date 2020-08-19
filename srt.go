@@ -2,26 +2,20 @@ package subtitles
 
 import "io"
 
-// SRT subtitle format
-type SRT struct {
-}
-
 // SRTExtension extension for format
 const SRTExtension string = ".srt"
 
-// NewSRT returns SRT format instance
-func NewSRT() *SRT {
-	return &SRT{}
+// SRTParser subtitle format
+type SRTParser struct{}
+
+// NewSRTParser returns SRT format instance
+func NewSRTParser() *SRTParser {
+	return &SRTParser{}
 }
 
-// Parse from SRT subtitle format
-func (f *SRT) Parse(r io.Reader) (s *Subtitle, err error) {
+// Parse SRT subtitle content
+func (p *SRTParser) Parse(r io.Reader) (s *Subtitle, err error) {
 	s = NewSubtitle()
 
 	return s, err
-}
-
-// Write to SRT subtitle format
-func (f *SRT) Write(w io.Writer) (err error) {
-	return err
 }

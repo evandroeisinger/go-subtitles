@@ -6,17 +6,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFormatForFileSRT(t *testing.T) {
-	format, err := FormatForFile("valid.srt")
+func TestParserForFileSRT(t *testing.T) {
+	parser, err := ParserForFile("valid.srt")
 
-	assert.Equal(t, NewSRT(), format)
+	assert.Equal(t, NewSRTParser(), parser)
 	assert.Nil(t, err)
 }
 
-func TestFormatForInvalidFileFormat(t *testing.T) {
-	format, err := FormatForFile("invalid.mp4")
+func TestParserForInvalidFile(t *testing.T) {
+	parser, err := ParserForFile("invalid.mp4")
 
-	assert.Nil(t, format)
+	assert.Nil(t, parser)
 	assert.EqualError(t, err, "Unsupported extension: .mp4")
 }
 

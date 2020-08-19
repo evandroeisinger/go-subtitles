@@ -6,12 +6,6 @@ import (
 	"path/filepath"
 )
 
-// Format interface
-type Format interface {
-	Parse(r io.Reader) (*Subtitle, error)
-	Write(w io.Writer) error
-}
-
 // Block struct
 type Block struct {
 	lines   []string
@@ -39,20 +33,25 @@ func (e *ErrUnsupportedExtension) Error() string {
 	return fmt.Sprintf("Unsupported extension: %s", e.extension)
 }
 
-// FormatForFile returns format
-func FormatForFile(p string) (f Format, err error) {
-	fileExtension := filepath.Ext(p)
+// Parser interface
+type Parser interface {
+	Parse(r io.Reader) (*Subtitle, error)
+}
+
+// ParserForFile returns parser for subtitle format
+func ParserForFile(f string) (p Parser, err error) {
+	fileExtension := filepath.Ext(f)
 
 	switch fileExtension {
 	case SRTExtension:
-		f = NewSRT()
+		p = NewSRTParser()
 	default:
 		err = &ErrUnsupportedExtension{
 			extension: fileExtension,
 		}
 	}
 
-	return f, err
+	return p, err
 }
 
 // Load method
