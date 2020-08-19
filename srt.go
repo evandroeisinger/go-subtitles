@@ -16,7 +16,8 @@ func NewSRT() *SRT {
 
 // Parse from SRT subtitle format
 func (f *SRT) Parse(r io.Reader) (s *Subtitle, err error) {
-	s = &Subtitle{}
+	s = NewSubtitle()
+
 	return s, err
 }
 

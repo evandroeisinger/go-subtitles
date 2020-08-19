@@ -25,6 +25,11 @@ type Subtitle struct {
 	blocks  []Block
 }
 
+// NewSubtitle returns subtitle instance
+func NewSubtitle() *Subtitle {
+	return &Subtitle{}
+}
+
 // ErrUnsupportedExtension error
 type ErrUnsupportedExtension struct {
 	extension string
