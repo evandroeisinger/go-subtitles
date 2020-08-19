@@ -8,8 +8,8 @@ import (
 
 // Format interface
 type Format interface {
-	Read(reader io.Reader) (*Subtitle, error)
-	Write(writer io.Writer) error
+	Parse(r io.Reader) (*Subtitle, error)
+	Write(w io.Writer) error
 }
 
 // Block struct
@@ -35,30 +35,27 @@ func (e *ErrUnsupportedExtension) Error() string {
 }
 
 // FormatForFile returns format
-func FormatForFile(path string) (Format, error) {
-	fileExtension := filepath.Ext(path)
-
-	var format Format
-	var err error
+func FormatForFile(p string) (f Format, err error) {
+	fileExtension := filepath.Ext(p)
 
 	switch fileExtension {
-	case ".srt":
-		format = NewSRT()
+	case SRTExtension:
+		f = NewSRT()
 	default:
 		err = &ErrUnsupportedExtension{
 			extension: fileExtension,
 		}
 	}
 
-	return format, err
+	return f, err
 }
 
 // Load method
-func Load(path string) (Subtitle, error) {
-	subtitle := Subtitle{
+func Load(path string) (s Subtitle, err error) {
+	s = Subtitle{
 		content: "",
 		blocks:  []Block{},
 	}
 
-	return subtitle, nil
+	return s, err
 }
