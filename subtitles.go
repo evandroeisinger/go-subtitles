@@ -4,24 +4,39 @@ import (
 	"fmt"
 	"io"
 	"path/filepath"
+	"time"
 )
 
 // Block struct
 type Block struct {
-	lines   []string
-	startAt int
-	endAt   int
+	lines    []string
+	startAt  time.Duration
+	finishAt time.Duration
+}
+
+// NewBlock returns block instance
+func NewBlock() *Block {
+	return &Block{}
 }
 
 // Subtitle struct
 type Subtitle struct {
-	content string
-	blocks  []Block
+	blocks []*Block
 }
 
 // NewSubtitle returns subtitle instance
 func NewSubtitle() *Subtitle {
 	return &Subtitle{}
+}
+
+// ErrInvalidSubtitle error
+type ErrInvalidSubtitle struct {
+	format string
+	reason string
+}
+
+func (e *ErrInvalidSubtitle) Error() string {
+	return fmt.Sprintf("Invalid %s subtitle: %s", e.format, e.reason)
 }
 
 // ErrUnsupportedExtension error
@@ -55,11 +70,8 @@ func ParserForFile(f string) (p Parser, err error) {
 }
 
 // Load method
-func Load(path string) (s Subtitle, err error) {
-	s = Subtitle{
-		content: "",
-		blocks:  []Block{},
-	}
+func Load(path string) (s *Subtitle, err error) {
+	s = NewSubtitle()
 
 	return s, err
 }

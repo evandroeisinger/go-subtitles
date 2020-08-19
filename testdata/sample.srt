@@ -18,5 +18,6 @@ quis <b>nostrud exercitation</b> ullamco
 
 5
 00:00:04,500 --> 00:00:05,000
-Ut enim ad minim veniam, 
-quis <b>nostrud exercitation</b> ullamco
+Sed do eiusmod tempor incididunt,
+lorem ipsum dolor sit amet!
+Ut enim ad minim veniam
