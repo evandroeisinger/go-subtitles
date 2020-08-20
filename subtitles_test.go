@@ -38,3 +38,10 @@ func TestLoadInvalidFile(t *testing.T) {
 		assert.EqualError(t, err, file.err)
 	}
 }
+
+func TestLoadFile(t *testing.T) {
+	subtitle, err := Load("testdata/sample.srt")
+
+	assert.Equal(t, 5, len(subtitle.Blocks))
+	assert.Nil(t, err)
+}
