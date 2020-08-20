@@ -36,7 +36,7 @@ type ErrInvalidSubtitle struct {
 }
 
 func (e *ErrInvalidSubtitle) Error() string {
-	return fmt.Sprintf("Invalid %s subtitle: %s", e.format, e.reason)
+	return fmt.Sprintf("Invalid subtitle %s: %s", e.format, e.reason)
 }
 
 // ErrUnsupportedExtension error
@@ -46,6 +46,16 @@ type ErrUnsupportedExtension struct {
 
 func (e *ErrUnsupportedExtension) Error() string {
 	return fmt.Sprintf("Unsupported extension: %s", e.extension)
+}
+
+// ErrInvalidFile error
+type ErrInvalidFile struct {
+	file   string
+	reason string
+}
+
+func (e *ErrInvalidFile) Error() string {
+	return fmt.Sprintf("Invalid file %s: %s", e.file, e.reason)
 }
 
 // Parser interface

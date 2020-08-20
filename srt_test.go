@@ -13,10 +13,10 @@ func TestParseSubtitleWithInvalidBlockIndex(t *testing.T) {
 		content string
 		err     string
 	}{
-		{BOMUnicode, "Invalid SRT subtitle: Expected index 1 at line 1 got: "},
-		{"0", "Invalid SRT subtitle: Expected index 1 at line 1 got: 0"},
-		{"2", "Invalid SRT subtitle: Expected index 1 at line 1 got: 2"},
-		{"one", "Invalid SRT subtitle: Expected index 1 at line 1 got: one"},
+		{BOMUnicode, "Invalid subtitle SRT: Expected index 1 at line 1 got: "},
+		{"0", "Invalid subtitle SRT: Expected index 1 at line 1 got: 0"},
+		{"2", "Invalid subtitle SRT: Expected index 1 at line 1 got: 2"},
+		{"one", "Invalid subtitle SRT: Expected index 1 at line 1 got: one"},
 	}
 
 	for _, line := range lines {
@@ -33,9 +33,9 @@ func TestParseSubtitleWithInvalidBlockTime(t *testing.T) {
 		content string
 		err     string
 	}{
-		{"1\nLorem ipsum", "Invalid SRT subtitle: Expected duration with pattern (hh:mm:ss,fff --> hh:mm:ss,fff) at line 2 got: Lorem ipsum"},
-		{"1\n00:00:00", "Invalid SRT subtitle: Expected duration with pattern (hh:mm:ss,fff --> hh:mm:ss,fff) at line 2 got: 00:00:00"},
-		{"1\n00:00:00 -> 99:99:99", "Invalid SRT subtitle: Expected duration with pattern (hh:mm:ss,fff --> hh:mm:ss,fff) at line 2 got: 00:00:00 -> 99:99:99"},
+		{"1\nLorem ipsum", "Invalid subtitle SRT: Expected duration with pattern (hh:mm:ss,fff --> hh:mm:ss,fff) at line 2 got: Lorem ipsum"},
+		{"1\n00:00:00", "Invalid subtitle SRT: Expected duration with pattern (hh:mm:ss,fff --> hh:mm:ss,fff) at line 2 got: 00:00:00"},
+		{"1\n00:00:00 -> 99:99:99", "Invalid subtitle SRT: Expected duration with pattern (hh:mm:ss,fff --> hh:mm:ss,fff) at line 2 got: 00:00:00 -> 99:99:99"},
 	}
 
 	for _, line := range lines {
@@ -52,7 +52,7 @@ func TestParseSubtitleWithoutTextLines(t *testing.T) {
 	subtitle, err := NewSRTParser().Parse(reader)
 
 	assert.Equal(t, NewSubtitle(), subtitle)
-	assert.EqualError(t, err, "Invalid SRT subtitle: Expected text at line 3 got: empty line")
+	assert.EqualError(t, err, "Invalid subtitle SRT: Expected text at line 3 got: empty line")
 }
 
 func TestParseSimpleBlock(t *testing.T) {
