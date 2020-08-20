@@ -2,7 +2,7 @@
 Golang package for Subtitles manipulation. 
 
 ```shell
-go get -u github.com/evandroeisinger/subtitles
+go get -u github.com/evandroeisinger/go-subtitles
 ```
 
 ### Supported formats
