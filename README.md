@@ -7,13 +7,13 @@ go get -u github.com/evandroeisinger/subtitles
 
 ### Supported formats
 - [x] SRT
-- [] WebVTT
+- [ ] WebVTT
 
 ### Available operations:
 - [x] Parsing 
-- [] Writing
-- [] Shifting
-- [] Merging
+- [ ] Writing
+- [ ] Shifting
+- [ ] Merging
 
 ### Usage
 ```golang
