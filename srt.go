@@ -106,11 +106,11 @@ func (p *SRTParser) Parse(r io.Reader) (*Subtitle, error) {
 		}
 
 		block := NewBlock()
-		block.startAt = startAt
-		block.finishAt = finishAt
-		block.lines = lines
+		block.StartAt = startAt
+		block.FinishAt = finishAt
+		block.Lines = lines
 
-		subtitle.blocks = append(subtitle.blocks, block)
+		subtitle.Blocks = append(subtitle.Blocks, block)
 	}
 
 	return subtitle, nil

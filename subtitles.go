@@ -9,9 +9,9 @@ import (
 
 // Block struct
 type Block struct {
-	lines    []string
-	startAt  time.Duration
-	finishAt time.Duration
+	Lines    []string      `json:"lines"`
+	StartAt  time.Duration `json:"startAt"`
+	FinishAt time.Duration `json:"finishAt"`
 }
 
 // NewBlock returns block instance
@@ -21,7 +21,7 @@ func NewBlock() *Block {
 
 // Subtitle struct
 type Subtitle struct {
-	blocks []*Block
+	Blocks []*Block `json:"blocks"`
 }
 
 // NewSubtitle returns subtitle instance
@@ -74,6 +74,8 @@ func Load(p string) (*Subtitle, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	defer file.Close()
 
 	parser, err := ParserForFile(p)
 	if err != nil {

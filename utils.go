@@ -58,7 +58,5 @@ func OpenFile(p string) (*os.File, error) {
 
 	file, err := os.Open(p)
 
-	defer file.Close()
-
 	return file, err
 }

@@ -60,11 +60,11 @@ func TestParseSimpleBlock(t *testing.T) {
 	subtitle, err := NewSRTParser().Parse(content)
 
 	assert.Nil(t, err)
-	assert.Equal(t, 1, len(subtitle.blocks))
-	assert.Equal(t, "0s", subtitle.blocks[0].startAt.String())
-	assert.Equal(t, "1m0s", subtitle.blocks[0].finishAt.String())
-	assert.Equal(t, "Lorem ipsum dolor sit amet", subtitle.blocks[0].lines[0])
-	assert.Equal(t, "dolor sit amet", subtitle.blocks[0].lines[1])
+	assert.Equal(t, 1, len(subtitle.Blocks))
+	assert.Equal(t, "0s", subtitle.Blocks[0].StartAt.String())
+	assert.Equal(t, "1m0s", subtitle.Blocks[0].FinishAt.String())
+	assert.Equal(t, "Lorem ipsum dolor sit amet", subtitle.Blocks[0].Lines[0])
+	assert.Equal(t, "dolor sit amet", subtitle.Blocks[0].Lines[1])
 }
 
 func TestParseSimpleBlockWithBOM(t *testing.T) {
@@ -73,11 +73,11 @@ func TestParseSimpleBlockWithBOM(t *testing.T) {
 	subtitle, err := NewSRTParser().Parse(reader)
 
 	assert.Nil(t, err)
-	assert.Equal(t, 1, len(subtitle.blocks))
-	assert.Equal(t, "0s", subtitle.blocks[0].startAt.String())
-	assert.Equal(t, "1m0s", subtitle.blocks[0].finishAt.String())
-	assert.Equal(t, "Lorem ipsum dolor sit amet", subtitle.blocks[0].lines[0])
-	assert.Equal(t, "dolor sit amet", subtitle.blocks[0].lines[1])
+	assert.Equal(t, 1, len(subtitle.Blocks))
+	assert.Equal(t, "0s", subtitle.Blocks[0].StartAt.String())
+	assert.Equal(t, "1m0s", subtitle.Blocks[0].FinishAt.String())
+	assert.Equal(t, "Lorem ipsum dolor sit amet", subtitle.Blocks[0].Lines[0])
+	assert.Equal(t, "dolor sit amet", subtitle.Blocks[0].Lines[1])
 }
 
 func TestParse(t *testing.T) {
@@ -133,11 +133,11 @@ func TestParse(t *testing.T) {
 	}
 
 	assert.Nil(t, err)
-	assert.Equal(t, len(blocks), len(subtitle.blocks))
+	assert.Equal(t, len(blocks), len(subtitle.Blocks))
 
 	for index, block := range blocks {
-		assert.Equal(t, block.startAt, subtitle.blocks[index].startAt.String())
-		assert.Equal(t, block.finishAt, subtitle.blocks[index].finishAt.String())
-		assert.Equal(t, block.lines, subtitle.blocks[index].lines)
+		assert.Equal(t, block.startAt, subtitle.Blocks[index].StartAt.String())
+		assert.Equal(t, block.finishAt, subtitle.Blocks[index].FinishAt.String())
+		assert.Equal(t, block.lines, subtitle.Blocks[index].Lines)
 	}
 }
