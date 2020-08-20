@@ -17,12 +17,24 @@ func TestParserForInvalidFile(t *testing.T) {
 	parser, err := ParserForFile("invalid.mp4")
 
 	assert.Nil(t, parser)
-	assert.EqualError(t, err, "Unsupported extension: .mp4")
+	assert.EqualError(t, err, "Invalid file invalid.mp4: Extension not supported")
 }
 
-func TestLoadEmptySubtitle(t *testing.T) {
-	subtitle, err := Load("testdata/empty.srt")
+func TestLoadInvalidFile(t *testing.T) {
+	files := []struct {
+		path string
+		err  string
+	}{
+		{"testdata/unsupported.uspd", "Invalid file testdata/unsupported.uspd: Extension not supported"},
+		{"testdata/invalid.srt", "Invalid file testdata/invalid.srt: File not exist"},
+		{"testdata/empty.srt", "Invalid file testdata/empty.srt: Empty file"},
+		{"testdata", "Invalid file testdata: Its not a file"},
+	}
 
-	assert.Equal(t, 0, len(subtitle.blocks), "should have 0 blocks parsed")
-	assert.Nil(t, err, "should not returns errors")
+	for _, file := range files {
+		subtitle, err := Load(file.path)
+
+		assert.Nil(t, subtitle)
+		assert.EqualError(t, err, file.err)
+	}
 }

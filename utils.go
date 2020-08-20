@@ -16,7 +16,6 @@ func StripBOM(s string) string {
 // IsFile checks if its a file
 func IsFile(p string) bool {
 	fileInfo, err := os.Stat(p)
-
 	if err != nil {
 		return false
 	}
@@ -27,7 +26,6 @@ func IsFile(p string) bool {
 // IsEmptyFile checks if file has content
 func IsEmptyFile(p string) bool {
 	fileInfo, err := os.Stat(p)
-
 	if err != nil {
 		return true
 	}
@@ -42,4 +40,25 @@ func FileExist(p string) bool {
 	}
 
 	return true
+}
+
+// OpenFile validate and return File reader
+func OpenFile(p string) (*os.File, error) {
+	if !FileExist(p) {
+		return nil, &ErrInvalidFile{p, "File not exist"}
+	}
+
+	if !IsFile(p) {
+		return nil, &ErrInvalidFile{p, "Its not a file"}
+	}
+
+	if IsEmptyFile(p) {
+		return nil, &ErrInvalidFile{p, "Empty file"}
+	}
+
+	file, err := os.Open(p)
+
+	defer file.Close()
+
+	return file, err
 }

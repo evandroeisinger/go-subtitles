@@ -39,15 +39,6 @@ func (e *ErrInvalidSubtitle) Error() string {
 	return fmt.Sprintf("Invalid subtitle %s: %s", e.format, e.reason)
 }
 
-// ErrUnsupportedExtension error
-type ErrUnsupportedExtension struct {
-	extension string
-}
-
-func (e *ErrUnsupportedExtension) Error() string {
-	return fmt.Sprintf("Unsupported extension: %s", e.extension)
-}
-
 // ErrInvalidFile error
 type ErrInvalidFile struct {
 	file   string
@@ -71,17 +62,24 @@ func ParserForFile(f string) (p Parser, err error) {
 	case SRTExtension:
 		p = NewSRTParser()
 	default:
-		err = &ErrUnsupportedExtension{
-			extension: fileExtension,
-		}
+		err = &ErrInvalidFile{f, "Extension not supported"}
 	}
 
 	return p, err
 }
 
 // Load method
-func Load(path string) (s *Subtitle, err error) {
-	s = NewSubtitle()
+func Load(p string) (*Subtitle, error) {
+	file, err := OpenFile(p)
+	if err != nil {
+		return nil, err
+	}
 
-	return s, err
+	parser, err := ParserForFile(p)
+	if err != nil {
+		return nil, err
+	}
+
+	subtitle, err := parser.Parse(file)
+	return subtitle, err
 }

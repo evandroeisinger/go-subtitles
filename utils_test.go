@@ -24,3 +24,21 @@ func TestFileExist(t *testing.T) {
 	assert.True(t, FileExist("testdata/sample.srt"))
 	assert.False(t, FileExist("testdata/invalid.srt"))
 }
+
+func TestOpenInvalidFile(t *testing.T) {
+	files := []struct {
+		path string
+		err  string
+	}{
+		{"testdata/invalid.srt", "Invalid file testdata/invalid.srt: File not exist"},
+		{"testdata/empty.srt", "Invalid file testdata/empty.srt: Empty file"},
+		{"testdata", "Invalid file testdata: Its not a file"},
+	}
+
+	for _, file := range files {
+		f, err := OpenFile(file.path)
+
+		assert.Nil(t, f)
+		assert.EqualError(t, err, file.err)
+	}
+}
