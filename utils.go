@@ -2,6 +2,7 @@ package subtitles
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -33,8 +34,8 @@ func IsEmptyFile(p string) bool {
 	return fileInfo.Size() == 0
 }
 
-// FileExist checks if its a valid file
-func FileExist(p string) bool {
+// PathExist checks if its a valid path
+func PathExist(p string) bool {
 	if _, err := os.Stat(p); err != nil {
 		return false
 	}
@@ -44,7 +45,7 @@ func FileExist(p string) bool {
 
 // OpenFile validate and return File reader
 func OpenFile(p string) (*os.File, error) {
-	if !FileExist(p) {
+	if !PathExist(p) {
 		return nil, &ErrInvalidFile{p, "File not exist"}
 	}
 
@@ -63,7 +64,11 @@ func OpenFile(p string) (*os.File, error) {
 
 // CreateFile validate and return File reader
 func CreateFile(p string) (*os.File, error) {
-	if FileExist(p) {
+	if !PathExist(filepath.Dir(p)) {
+		return nil, &ErrInvalidFile{p, "File path not exist"}
+	}
+
+	if PathExist(p) {
 		return nil, &ErrInvalidFile{p, "File already exist"}
 	}
 

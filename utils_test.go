@@ -20,9 +20,9 @@ func TestIsEmptyFile(t *testing.T) {
 	assert.False(t, IsEmptyFile("testdata/sample.srt"))
 }
 
-func TestFileExist(t *testing.T) {
-	assert.True(t, FileExist("testdata/sample.srt"))
-	assert.False(t, FileExist("testdata/invalid.srt"))
+func TestPathExist(t *testing.T) {
+	assert.True(t, PathExist("testdata/sample.srt"))
+	assert.False(t, PathExist("testdata/invalid.srt"))
 }
 
 func TestOpenInvalidFile(t *testing.T) {
@@ -44,8 +44,18 @@ func TestOpenInvalidFile(t *testing.T) {
 }
 
 func TestCreateInvalidFile(t *testing.T) {
-	f, err := CreateFile("testdata/sample.srt")
+	files := []struct {
+		path string
+		err  string
+	}{
+		{"testdata/sample.srt", "Invalid file testdata/sample.srt: File already exist"},
+		{"tmp/invalid.srt", "Invalid file tmp/invalid.srt: File path not exist"},
+	}
 
-	assert.Nil(t, f)
-	assert.EqualError(t, err, "Invalid file testdata/sample.srt: File already exist")
+	for _, file := range files {
+		f, err := CreateFile(file.path)
+
+		assert.Nil(t, f)
+		assert.EqualError(t, err, file.err)
+	}
 }
