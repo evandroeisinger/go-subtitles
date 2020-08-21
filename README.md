@@ -11,14 +11,21 @@ go get -u github.com/evandroeisinger/go-subtitles
 
 ### Available operations:
 - [x] Parsing 
-- [ ] Writing
+- [x] Writing
 - [ ] Shifting
 - [ ] Merging
 
 ### Usage
 ```golang
-subtitle, err := subtitle.Load("example.srt")
+// Load subtitle
+sub, err := subtitle.Load("example.srt")
 if err != nil {
-    fmt.PrintLn(err)
+    fmt.Println(err)
+}
+
+// Write subtitle
+err := subtitle.Write(sub, "example.srt")
+if err != nil {
+    fmt.Println(err)
 }
 ```
