@@ -70,7 +70,7 @@ func ParserForFile(f string) (Parser, error) {
 	case SRTExtension:
 		parser = NewSRTParser()
 	default:
-		err = &ErrInvalidFile{f, "Extension not supported"}
+		err = &ErrInvalidFile{f, "Parser for extension not found"}
 	}
 
 	return parser, err
@@ -87,13 +87,13 @@ func FormatterForFile(f string) (Formatter, error) {
 	case SRTExtension:
 		formatter = NewSRTFormatter()
 	default:
-		err = &ErrInvalidFile{f, "Extension not supported"}
+		err = &ErrInvalidFile{f, "Formatter for extension not found"}
 	}
 
 	return formatter, err
 }
 
-// Load method
+// Load subtitle
 func Load(p string) (*Subtitle, error) {
 	file, err := OpenFile(p)
 	if err != nil {
@@ -109,4 +109,28 @@ func Load(p string) (*Subtitle, error) {
 
 	subtitle, err := parser.Parse(file)
 	return subtitle, err
+}
+
+// Write subtitle
+func Write(s *Subtitle, p string) error {
+	parser, err := FormatterForFile(p)
+	if err != nil {
+		return err
+	}
+
+	content, err := parser.Format(s)
+	if err != nil {
+		return err
+	}
+
+	file, err := CreateFile(p)
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+
+	file.WriteString(content)
+
+	return nil
 }

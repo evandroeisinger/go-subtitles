@@ -60,3 +60,17 @@ func OpenFile(p string) (*os.File, error) {
 
 	return file, err
 }
+
+// CreateFile validate and return File reader
+func CreateFile(p string) (*os.File, error) {
+	if FileExist(p) {
+		return nil, &ErrInvalidFile{p, "File already exist"}
+	}
+
+	file, err := os.Create(p)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
+}

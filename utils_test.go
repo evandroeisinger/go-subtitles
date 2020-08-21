@@ -42,3 +42,10 @@ func TestOpenInvalidFile(t *testing.T) {
 		assert.EqualError(t, err, file.err)
 	}
 }
+
+func TestCreateInvalidFile(t *testing.T) {
+	f, err := CreateFile("testdata/sample.srt")
+
+	assert.Nil(t, f)
+	assert.EqualError(t, err, "Invalid file testdata/sample.srt: File already exist")
+}
