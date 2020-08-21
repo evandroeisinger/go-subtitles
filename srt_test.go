@@ -23,7 +23,7 @@ func TestParseSubtitleWithInvalidBlockIndex(t *testing.T) {
 		reader := strings.NewReader(line.content)
 		subtitle, err := NewSRTParser().Parse(reader)
 
-		assert.Equal(t, NewSubtitle(), subtitle)
+		assert.Nil(t, subtitle)
 		assert.EqualError(t, err, line.err)
 	}
 }
@@ -42,7 +42,7 @@ func TestParseSubtitleWithInvalidBlockTime(t *testing.T) {
 		reader := strings.NewReader(line.content)
 		subtitle, err := NewSRTParser().Parse(reader)
 
-		assert.Equal(t, NewSubtitle(), subtitle)
+		assert.Nil(t, subtitle)
 		assert.EqualError(t, err, line.err)
 	}
 }
@@ -51,7 +51,7 @@ func TestParseSubtitleWithoutTextLines(t *testing.T) {
 	reader := strings.NewReader("1\n00:00:00,000 --> 00:01:00,000")
 	subtitle, err := NewSRTParser().Parse(reader)
 
-	assert.Equal(t, NewSubtitle(), subtitle)
+	assert.Nil(t, subtitle)
 	assert.EqualError(t, err, "Invalid subtitle SRT: Expected text at line 3 got: empty line")
 }
 
