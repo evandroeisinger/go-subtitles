@@ -134,3 +134,57 @@ func (p *SRTParser) parseDuration(content string) time.Duration {
 
 	return hours + minutes + seconds + milliseconds
 }
+
+// SRTWriter subtitle format
+type SRTWriter struct{}
+
+// NewSRTWriter returns SRT format instance
+func NewSRTWriter() *SRTWriter {
+	return &SRTWriter{}
+}
+
+// Write SRT subtitle content
+func (w *SRTWriter) Write(s *Subtitle) string {
+	var content strings.Builder
+
+	lastLineIndex := len(s.Blocks) - 1
+	for index, block := range s.Blocks {
+		blockIndex := strconv.Itoa(index + 1)
+		content.WriteString(blockIndex)
+		content.WriteString("\n")
+
+		startAt := w.formatDuration(block.StartAt)
+		finishAt := w.formatDuration(block.FinishAt)
+
+		content.WriteString(startAt)
+		content.WriteString(" --> ")
+		content.WriteString(finishAt)
+		content.WriteString("\n")
+
+		for _, line := range block.Lines {
+			content.WriteString(line)
+			content.WriteString("\n")
+		}
+
+		if index != lastLineIndex {
+			content.WriteString("\n")
+		}
+	}
+
+	return content.String()
+}
+
+func (w *SRTWriter) formatDuration(d time.Duration) string {
+	h := d / time.Hour
+
+	d -= h * time.Hour
+	m := d / time.Minute
+
+	d -= m * time.Minute
+	s := d / time.Second
+
+	d -= s * time.Second
+	ms := d / time.Millisecond
+
+	return fmt.Sprintf("%02d:%02d:%02d,%03d", h, m, s, ms)
+}

@@ -1,9 +1,11 @@
 package subtitles
 
 import (
+	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -140,4 +142,29 @@ func TestParse(t *testing.T) {
 		assert.Equal(t, block.finishAt, subtitle.Blocks[index].FinishAt.String())
 		assert.Equal(t, block.lines, subtitle.Blocks[index].Lines)
 	}
+}
+
+func TestWriteEmptySubtitle(t *testing.T) {
+	subtitle := NewSubtitle()
+
+	assert.Equal(t, "", NewSRTWriter().Write(subtitle))
+}
+
+func TestWriteSimpleBlock(t *testing.T) {
+	block := NewBlock()
+	block.StartAt, _ = time.ParseDuration("0s500ms")
+	block.FinishAt, _ = time.ParseDuration("1m30s")
+	block.Lines = []string{"Lorem ipsum dolor sit amet"}
+
+	subtitle := NewSubtitle()
+	subtitle.Blocks = append(subtitle.Blocks, block)
+
+	assert.Equal(t, "1\n00:00:00,500 --> 00:01:30,000\nLorem ipsum dolor sit amet\n", NewSRTWriter().Write(subtitle))
+}
+
+func TestWrite(t *testing.T) {
+	content, _ := ioutil.ReadFile("testdata/sample.srt")
+	subtitle, _ := Load("testdata/sample.srt")
+
+	assert.Equal(t, string(content), NewSRTWriter().Write(subtitle))
 }

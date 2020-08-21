@@ -13,7 +13,7 @@ sed do eiusmod tempor incididunt
 
 4
 00:00:03,500 --> 00:00:04,500
-Ut enim ad minim veniam, 
+Ut enim ad minim veniam,
 quis <b>nostrud exercitation</b> ullamco
 
 5
