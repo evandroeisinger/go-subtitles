@@ -135,54 +135,67 @@ func (p *SRTParser) parseDuration(content string) time.Duration {
 	return hours + minutes + seconds + milliseconds
 }
 
-// SRTWriter subtitle format
-type SRTWriter struct{}
-
-// NewSRTWriter returns SRT format instance
-func NewSRTWriter() *SRTWriter {
-	return &SRTWriter{}
+// SRTFormatter subtitle format
+type SRTFormatter struct {
+	content strings.Builder
 }
 
-// Write SRT subtitle content
-func (w *SRTWriter) Write(s *Subtitle) string {
-	var content strings.Builder
+// NewSRTFormatter returns SRT format instance
+func NewSRTFormatter() *SRTFormatter {
+	return &SRTFormatter{}
+}
 
-	lastLineIndex := len(s.Blocks) - 1
-	for index, block := range s.Blocks {
-		blockIndex := strconv.Itoa(index + 1)
-		content.WriteString(blockIndex)
-		content.WriteString("\n")
-
-		startAt := w.formatDuration(block.StartAt)
-		finishAt := w.formatDuration(block.FinishAt)
-
-		content.WriteString(startAt)
-		content.WriteString(" --> ")
-		content.WriteString(finishAt)
-		content.WriteString("\n")
-
-		for _, line := range block.Lines {
-			content.WriteString(line)
-			content.WriteString("\n")
-		}
-
-		if index != lastLineIndex {
-			content.WriteString("\n")
+// Format SRT subtitle content
+func (f *SRTFormatter) Format(s *Subtitle) (string, error) {
+	blockCount := len(s.Blocks)
+	if blockCount == 0 {
+		return "", &ErrInvalidSubtitle{
+			format: SRTFormat,
+			reason: fmt.Sprintf("Empty blocks"),
 		}
 	}
 
-	return content.String()
+	lastBlockIndex := blockCount - 1
+	for index, block := range s.Blocks {
+		// block index
+		blockIndex := strconv.Itoa(index + 1)
+		f.content.WriteString(blockIndex)
+		f.content.WriteString("\n")
+
+		// duration: hh:mm:ss,fff --> hh:mm:ss,fff
+		startAt := f.formatDuration(block.StartAt)
+		finishAt := f.formatDuration(block.FinishAt)
+
+		f.content.WriteString(startAt)
+		f.content.WriteString(" --> ")
+		f.content.WriteString(finishAt)
+		f.content.WriteString("\n")
+
+		// lines
+		for _, line := range block.Lines {
+			f.content.WriteString(line)
+			f.content.WriteString("\n")
+		}
+
+		// blank line between blocks
+		if index != lastBlockIndex {
+			f.content.WriteString("\n")
+		}
+	}
+
+	return f.content.String(), nil
 }
 
-func (w *SRTWriter) formatDuration(d time.Duration) string {
+func (f *SRTFormatter) formatDuration(d time.Duration) string {
+	// hours
 	h := d / time.Hour
-
+	// minutes
 	d -= h * time.Hour
 	m := d / time.Minute
-
+	// seconds
 	d -= m * time.Minute
 	s := d / time.Second
-
+	// milliseconds
 	d -= s * time.Second
 	ms := d / time.Millisecond
 

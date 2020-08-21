@@ -54,6 +54,11 @@ type Parser interface {
 	Parse(r io.Reader) (*Subtitle, error)
 }
 
+// Formatter interface
+type Formatter interface {
+	Format(r io.Reader) string
+}
+
 // ParserForFile returns parser for subtitle format
 func ParserForFile(f string) (p Parser, err error) {
 	fileExtension := filepath.Ext(f)

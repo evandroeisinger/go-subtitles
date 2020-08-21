@@ -144,13 +144,15 @@ func TestParse(t *testing.T) {
 	}
 }
 
-func TestWriteEmptySubtitle(t *testing.T) {
+func TestFormatEmptySubtitle(t *testing.T) {
 	subtitle := NewSubtitle()
+	content, err := NewSRTFormatter().Format(subtitle)
 
-	assert.Equal(t, "", NewSRTWriter().Write(subtitle))
+	assert.EqualError(t, err, "Invalid subtitle SRT: Empty blocks")
+	assert.Equal(t, "", content)
 }
 
-func TestWriteSimpleBlock(t *testing.T) {
+func TestFormatSimpleBlock(t *testing.T) {
 	block := NewBlock()
 	block.StartAt, _ = time.ParseDuration("0s500ms")
 	block.FinishAt, _ = time.ParseDuration("1m30s")
@@ -159,12 +161,16 @@ func TestWriteSimpleBlock(t *testing.T) {
 	subtitle := NewSubtitle()
 	subtitle.Blocks = append(subtitle.Blocks, block)
 
-	assert.Equal(t, "1\n00:00:00,500 --> 00:01:30,000\nLorem ipsum dolor sit amet\n", NewSRTWriter().Write(subtitle))
+	content, err := NewSRTFormatter().Format(subtitle)
+	assert.Nil(t, err)
+	assert.Equal(t, "1\n00:00:00,500 --> 00:01:30,000\nLorem ipsum dolor sit amet\n", content)
 }
 
-func TestWrite(t *testing.T) {
-	content, _ := ioutil.ReadFile("testdata/sample.srt")
+func TestFormat(t *testing.T) {
+	expectedContent, _ := ioutil.ReadFile("testdata/sample.srt")
 	subtitle, _ := Load("testdata/sample.srt")
 
-	assert.Equal(t, string(content), NewSRTWriter().Write(subtitle))
+	content, err := NewSRTFormatter().Format(subtitle)
+	assert.Equal(t, string(expectedContent), content)
+	assert.Nil(t, err)
 }
