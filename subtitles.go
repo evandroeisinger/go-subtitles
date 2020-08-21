@@ -56,21 +56,41 @@ type Parser interface {
 
 // Formatter interface
 type Formatter interface {
-	Format(r io.Reader) string
+	Format(s *Subtitle) (string, error)
 }
 
 // ParserForFile returns parser for subtitle format
-func ParserForFile(f string) (p Parser, err error) {
+func ParserForFile(f string) (Parser, error) {
 	fileExtension := filepath.Ext(f)
+
+	var parser Parser
+	var err error
 
 	switch fileExtension {
 	case SRTExtension:
-		p = NewSRTParser()
+		parser = NewSRTParser()
 	default:
 		err = &ErrInvalidFile{f, "Extension not supported"}
 	}
 
-	return p, err
+	return parser, err
+}
+
+// FormatterForFile returns parser for subtitle format
+func FormatterForFile(f string) (Formatter, error) {
+	fileExtension := filepath.Ext(f)
+
+	var formatter Formatter
+	var err error
+
+	switch fileExtension {
+	case SRTExtension:
+		formatter = NewSRTFormatter()
+	default:
+		err = &ErrInvalidFile{f, "Extension not supported"}
+	}
+
+	return formatter, err
 }
 
 // Load method

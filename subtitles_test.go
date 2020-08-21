@@ -20,6 +20,20 @@ func TestParserForInvalidFile(t *testing.T) {
 	assert.EqualError(t, err, "Invalid file invalid.mp4: Extension not supported")
 }
 
+func TestFormatterForFileSRT(t *testing.T) {
+	formatter, err := FormatterForFile("valid.srt")
+
+	assert.Equal(t, NewSRTFormatter(), formatter)
+	assert.Nil(t, err)
+}
+
+func TestFormatterForInvalidFile(t *testing.T) {
+	formatter, err := FormatterForFile("invalid.mp4")
+
+	assert.Nil(t, formatter)
+	assert.EqualError(t, err, "Invalid file invalid.mp4: Extension not supported")
+}
+
 func TestLoadInvalidFile(t *testing.T) {
 	files := []struct {
 		path string
