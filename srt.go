@@ -29,8 +29,9 @@ func NewSRTParser() *SRTParser {
 
 // Parse SRT subtitle content
 func (p *SRTParser) Parse(r io.Reader) (*Subtitle, error) {
-	lineIndex := 0
-	blockIndex := 0
+	var line string
+	var lineIndex int
+	var blockIndex int
 
 	subtitle := NewSubtitle()
 	scanner := bufio.NewScanner(r)
@@ -40,16 +41,16 @@ func (p *SRTParser) Parse(r io.Reader) (*Subtitle, error) {
 		lineIndex++
 
 		// Remove BOM
-		lineContent := strings.TrimSpace(scanner.Text())
+		line = strings.TrimSpace(scanner.Text())
 		if lineIndex == 1 {
-			lineContent = StripBOM(lineContent)
+			line = StripBOM(line)
 		}
 
 		// Block index
-		if index, _ := strconv.Atoi(lineContent); index != blockIndex {
+		if index, _ := strconv.Atoi(line); index != blockIndex {
 			return NewSubtitle(), &ErrInvalidSubtitle{
 				format: SRTFormat,
-				reason: fmt.Sprintf("Expected index %v at line %v got: %v", blockIndex, lineIndex, lineContent),
+				reason: fmt.Sprintf("Expected index %v at line %v got: %v", blockIndex, lineIndex, line),
 			}
 		}
 
@@ -58,12 +59,12 @@ func (p *SRTParser) Parse(r io.Reader) (*Subtitle, error) {
 		lineIndex++
 
 		// Block duration: hh:mm:ss,fff --> hh:mm:ss,fff
-		lineContent = strings.TrimSpace(scanner.Text())
-		blockDurations := SRTBlockDurationPattern.FindStringSubmatch(lineContent)
+		line = strings.TrimSpace(scanner.Text())
+		blockDurations := SRTBlockDurationPattern.FindStringSubmatch(line)
 		if len(blockDurations) == 0 {
 			return NewSubtitle(), &ErrInvalidSubtitle{
 				format: SRTFormat,
-				reason: fmt.Sprintf("Expected duration with pattern (hh:mm:ss,fff --> hh:mm:ss,fff) at line %v got: %v", lineIndex, lineContent),
+				reason: fmt.Sprintf("Expected duration with pattern (hh:mm:ss,fff --> hh:mm:ss,fff) at line %v got: %v", lineIndex, line),
 			}
 		}
 
@@ -74,8 +75,8 @@ func (p *SRTParser) Parse(r io.Reader) (*Subtitle, error) {
 		scanner.Scan()
 		lineIndex++
 
-		lineContent = strings.TrimSpace(scanner.Text())
-		if len(lineContent) == 0 {
+		line = strings.TrimSpace(scanner.Text())
+		if len(line) == 0 {
 			return NewSubtitle(), &ErrInvalidSubtitle{
 				format: SRTFormat,
 				reason: fmt.Sprintf("Expected text at line %v got: empty line", lineIndex),
@@ -84,21 +85,21 @@ func (p *SRTParser) Parse(r io.Reader) (*Subtitle, error) {
 
 		lines := []string{}
 		for {
-			if len(lineContent) > 0 {
-				lines = append(lines, lineContent)
+			if len(line) > 0 {
+				lines = append(lines, line)
 
 				scanner.Scan()
 				lineIndex++
 
-				lineContent = strings.TrimSpace(scanner.Text())
+				line = strings.TrimSpace(scanner.Text())
 			} else {
 				break
 			}
 		}
 
 		// Empty line
-		lineContent = strings.TrimSpace(scanner.Text())
-		if len(lineContent) > 0 {
+		line = strings.TrimSpace(scanner.Text())
+		if len(line) > 0 {
 			return NewSubtitle(), &ErrInvalidSubtitle{
 				format: SRTFormat,
 				reason: fmt.Sprintf("Expected empty line at %v", lineIndex),
