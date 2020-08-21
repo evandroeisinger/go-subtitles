@@ -75,18 +75,21 @@ func TestWriteInvalidSubtitles(t *testing.T) {
 	}
 
 	for _, file := range files {
-		err := Write(file.subtitle, file.path)
+		n, err := Write(file.subtitle, file.path)
 
 		assert.EqualError(t, err, file.err)
+		assert.Equal(t, 0, n)
 	}
 }
 
 func TestWrite(t *testing.T) {
 	sampleSubtitle, _ := Load("testdata/sample.srt")
-	err := Write(sampleSubtitle, "testdata/tmp.srt")
-	tmpSubtitle, _ := Load("testdata/tmp.srt")
 
+	n, err := Write(sampleSubtitle, "testdata/tmp.srt")
 	assert.Nil(t, err)
+	assert.Equal(t, 444, n)
+
+	tmpSubtitle, _ := Load("testdata/tmp.srt")
 	assert.EqualValues(t, sampleSubtitle, tmpSubtitle)
 
 	os.Remove("testdata/tmp.srt")
