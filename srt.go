@@ -28,12 +28,12 @@ func NewSRTParser() *SRTParser {
 }
 
 // Parse SRT subtitle content
-func (p *SRTParser) Parse(r io.Reader) (*Subtitle, error) {
+func (p *SRTParser) Parse(r io.Reader) (sub *Subtitle, err error) {
 	var line string
 	var lineIndex int
 	var blockIndex int
 
-	subtitle := NewSubtitle()
+	sub = NewSubtitle()
 	scanner := bufio.NewScanner(r)
 
 	for scanner.Scan() {
@@ -111,14 +111,14 @@ func (p *SRTParser) Parse(r io.Reader) (*Subtitle, error) {
 		block.FinishAt = finishAt
 		block.Lines = lines
 
-		subtitle.Blocks = append(subtitle.Blocks, block)
+		sub.Blocks = append(sub.Blocks, block)
 	}
 
-	return subtitle, nil
+	return sub, nil
 }
 
-func (p *SRTParser) parseDuration(content string) time.Duration {
-	duration := strings.Split(content, ":")
+func (p *SRTParser) parseDuration(c string) time.Duration {
+	duration := strings.Split(c, ":")
 
 	parsedHours, _ := strconv.Atoi(duration[0])
 	hours := time.Duration(parsedHours) * time.Hour
@@ -146,8 +146,8 @@ func NewSRTFormatter() *SRTFormatter {
 }
 
 // Format SRT subtitle content
-func (f *SRTFormatter) Format(s *Subtitle) (string, error) {
-	blockCount := len(s.Blocks)
+func (f *SRTFormatter) Format(sub *Subtitle) (string, error) {
+	blockCount := len(sub.Blocks)
 	if blockCount == 0 {
 		return "", &ErrInvalidSubtitle{
 			format: SRTFormat,
@@ -156,7 +156,7 @@ func (f *SRTFormatter) Format(s *Subtitle) (string, error) {
 	}
 
 	lastBlockIndex := blockCount - 1
-	for index, block := range s.Blocks {
+	for index, block := range sub.Blocks {
 		// block index
 		blockIndex := strconv.Itoa(index + 1)
 		f.content.WriteString(blockIndex)

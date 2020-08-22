@@ -60,60 +60,54 @@ type Formatter interface {
 }
 
 // ParserForFile returns parser for subtitle format
-func ParserForFile(f string) (Parser, error) {
-	fileExtension := filepath.Ext(f)
-
-	var parser Parser
-	var err error
+func ParserForFile(path string) (p Parser, err error) {
+	fileExtension := filepath.Ext(path)
 
 	switch fileExtension {
 	case SRTExtension:
-		parser = NewSRTParser()
+		p = NewSRTParser()
 	default:
-		err = &ErrInvalidFile{f, "Parser for extension not found"}
+		err = &ErrInvalidFile{path, "Parser for extension not found"}
 	}
 
-	return parser, err
+	return p, err
 }
 
 // FormatterForFile returns parser for subtitle format
-func FormatterForFile(f string) (Formatter, error) {
-	fileExtension := filepath.Ext(f)
-
-	var formatter Formatter
-	var err error
+func FormatterForFile(path string) (f Formatter, err error) {
+	fileExtension := filepath.Ext(path)
 
 	switch fileExtension {
 	case SRTExtension:
-		formatter = NewSRTFormatter()
+		f = NewSRTFormatter()
 	default:
-		err = &ErrInvalidFile{f, "Formatter for extension not found"}
+		err = &ErrInvalidFile{path, "Formatter for extension not found"}
 	}
 
-	return formatter, err
+	return f, err
 }
 
 // Load subtitle
-func Load(p string) (*Subtitle, error) {
-	file, err := OpenFile(p)
+func Load(path string) (sub *Subtitle, err error) {
+	file, err := OpenFile(path)
 	if err != nil {
 		return nil, err
 	}
 
 	defer file.Close()
 
-	parser, err := ParserForFile(p)
+	parser, err := ParserForFile(path)
 	if err != nil {
 		return nil, err
 	}
 
-	subtitle, err := parser.Parse(file)
-	return subtitle, err
+	sub, err = parser.Parse(file)
+	return sub, err
 }
 
 // Write subtitle
-func Write(s *Subtitle, p string) (int, error) {
-	parser, err := FormatterForFile(p)
+func Write(s *Subtitle, path string) (n int, err error) {
+	parser, err := FormatterForFile(path)
 	if err != nil {
 		return 0, err
 	}
@@ -123,14 +117,14 @@ func Write(s *Subtitle, p string) (int, error) {
 		return 0, err
 	}
 
-	file, err := CreateFile(p)
+	file, err := CreateFile(path)
 	if err != nil {
 		return 0, err
 	}
 
 	defer file.Close()
 
-	n, err := file.WriteString(content)
+	n, err = file.WriteString(content)
 
 	return n, err
 }

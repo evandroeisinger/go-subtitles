@@ -63,16 +63,16 @@ func OpenFile(p string) (*os.File, error) {
 }
 
 // CreateFile validate and return File reader
-func CreateFile(p string) (*os.File, error) {
-	if !PathExist(filepath.Dir(p)) {
-		return nil, &ErrInvalidFile{p, "File path not exist"}
+func CreateFile(path string) (*os.File, error) {
+	if !PathExist(filepath.Dir(path)) {
+		return nil, &ErrInvalidFile{path, "File path not exist"}
 	}
 
-	if PathExist(p) {
-		return nil, &ErrInvalidFile{p, "File already exist"}
+	if PathExist(path) {
+		return nil, &ErrInvalidFile{path, "File already exist"}
 	}
 
-	file, err := os.Create(p)
+	file, err := os.Create(path)
 	if err != nil {
 		return nil, err
 	}
