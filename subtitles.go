@@ -106,25 +106,24 @@ func Load(path string) (sub *Subtitle, err error) {
 }
 
 // Write subtitle
-func Write(s *Subtitle, path string) (n int, err error) {
+func Write(s *Subtitle, path string) (c string, err error) {
 	parser, err := FormatterForFile(path)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
-	content, err := parser.Format(s)
+	c, err = parser.Format(s)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
 	file, err := CreateFile(path)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 
 	defer file.Close()
 
-	n, err = file.WriteString(content)
-
-	return n, err
+	_, err = file.WriteString(c)
+	return c, err
 }

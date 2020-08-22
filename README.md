@@ -24,8 +24,10 @@ if err != nil {
 }
 
 // Write subtitle
-_, err := subtitle.Write(sub, "example.srt")
+content, err := subtitle.Write(sub, "example.srt")
 if err != nil {
     fmt.Println(err)
+} else {
+    fmt.Println(content)
 }
 ```
