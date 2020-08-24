@@ -106,6 +106,18 @@ func TestShift(t *testing.T) {
 	assert.EqualValues(t, shiftedSubtitle, subtitle)
 }
 
+func TestConcat(t *testing.T) {
+	expectedSubtitle, _ := Load("testdata/sample.srt")
+
+	subtitleA, _ := Load("testdata/splitted_sample_a.srt")
+	subtitleB, _ := Load("testdata/splitted_sample_b.srt")
+
+	concatSubtitle, err := Concat(subtitleA, subtitleB)
+
+	assert.Nil(t, err)
+	assert.EqualValues(t, expectedSubtitle, concatSubtitle)
+}
+
 func TestMerge(t *testing.T) {
 	expectedSubtitle, _ := Load("testdata/sample.srt")
 

@@ -149,6 +149,28 @@ func Write(s *Subtitle, path string) (c string, err error) {
 	return c, err
 }
 
+// Concat subtitles
+func Concat(subs ...*Subtitle) (sub *Subtitle, err error) {
+	blocks := []*Block{}
+	durationCorrection := time.Second * 0
+
+	for _, sub := range subs {
+		for _, b := range sub.Blocks {
+			block := NewBlock()
+			block.Lines = b.Lines
+			block.StartAt = b.StartAt + durationCorrection
+			block.FinishAt = b.FinishAt + durationCorrection
+
+			blocks = append(blocks, block)
+		}
+
+		lastBlockIndex := len(sub.Blocks) - 1
+		durationCorrection = sub.Blocks[lastBlockIndex].FinishAt
+	}
+
+	return NewSubtitle(blocks...), err
+}
+
 // BlockSorter sorts blocks by startAt
 type BlockSorter []*Block
 

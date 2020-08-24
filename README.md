@@ -14,7 +14,7 @@ go get -u github.com/evandroeisinger/go-subtitles
 - [x] Writing
 - [x] Shifting
 - [x] Merging
-- [ ] Concatenating
+- [x] Concatenating
 - [ ] Slicing
 
 #### Simple Usage
@@ -41,6 +41,18 @@ sub.Shift(time.ParseDuration("1m30s"))
 
 // Shifts down all subtitle blocks timestamp
 sub.Shift(time.ParseDuration("-1m30s"))
+
+...
+```
+
+#### Concating
+```golang
+// Loads subtitle from file 
+sub_a, _ := subtitles.Load("sub_a.srt")
+sub_b, _ := subtitles.Load("sub_a.srt")
+
+// Concats subtitles fixing blocks timestamps
+sub_ab := subtitles.Merge(sub_a, sub_b)
 
 ...
 ```
