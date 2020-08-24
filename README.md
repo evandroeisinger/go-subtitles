@@ -15,6 +15,7 @@ go get -u github.com/evandroeisinger/go-subtitles
 - [x] Shifting
 - [x] Merging
 - [x] Concatenating
+- [ ] Cuting 
 - [ ] Slicing
 
 #### Simple Usage
