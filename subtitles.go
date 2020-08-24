@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"path/filepath"
+	"sort"
 	"time"
 )
 
@@ -45,8 +46,8 @@ func (s *Subtitle) Shift(d time.Duration) *Subtitle {
 }
 
 // NewSubtitle returns subtitle instance
-func NewSubtitle() *Subtitle {
-	return &Subtitle{}
+func NewSubtitle(blocks ...*Block) *Subtitle {
+	return &Subtitle{Blocks: blocks}
 }
 
 // ErrInvalidSubtitle error
@@ -146,4 +147,25 @@ func Write(s *Subtitle, path string) (c string, err error) {
 
 	_, err = file.WriteString(c)
 	return c, err
+}
+
+// BlockSorter sorts blocks by startAt
+type BlockSorter []*Block
+
+func (b BlockSorter) Len() int           { return len(b) }
+func (b BlockSorter) Swap(i, j int)      { b[i], b[j] = b[j], b[i] }
+func (b BlockSorter) Less(i, j int) bool { return b[i].StartAt < b[j].StartAt }
+
+// Merge subtitles
+func Merge(subs ...*Subtitle) (sub *Subtitle, err error) {
+	blocks := []*Block{}
+
+	for _, s := range subs {
+		blocks = append(blocks, s.Blocks...)
+	}
+
+	// Sort merged blocks
+	sort.Sort(BlockSorter(blocks))
+
+	return NewSubtitle(blocks...), err
 }

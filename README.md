@@ -13,9 +13,11 @@ go get -u github.com/evandroeisinger/go-subtitles
 - [x] Parsing 
 - [x] Writing
 - [x] Shifting
-- [ ] Merging
+- [x] Merging
+- [ ] Concatenating
+- [ ] Slicing
 
-### Usage
+#### Simple Usage
 ```golang
 // Loads subtitle from file 
 sub, err := subtitles.Load("example.srt")
@@ -23,17 +25,34 @@ if err != nil {
     fmt.Println(err)
 }
 
+// Writes subtitle to VTT format (writes according to extension format)
+content, _ := subtitles.Write(sub, "example.vtt")
+
+...
+```
+
+#### Shifting
+```golang
+// Loads subtitle from file 
+sub, _ := subtitles.Load("example.srt")
+
 // Shifts up all subtitle blocks timestamp
-sub.Shift(sub, time.ParseDuration("1m30s"))
+sub.Shift(time.ParseDuration("1m30s"))
 
 // Shifts down all subtitle blocks timestamp
-sub.Shift(sub, time.ParseDuration("-1m30s"))
+sub.Shift(time.ParseDuration("-1m30s"))
 
-// Writes subtitle according to extension format
-content, err := subtitles.Write(sub, "example.srt")
-if err != nil {
-    fmt.Println(err)
-} else {
-    fmt.Println(content)
-}
+...
+```
+
+#### Merging
+```golang
+// Loads subtitle from file 
+sub_a, _ := subtitles.Load("sub_a.srt")
+sub_b, _ := subtitles.Load("sub_a.srt")
+
+// Merges subtitles preserving timestamps
+sub_ab := subtitles.Merge(sub_a, sub_b)
+
+...
 ```
