@@ -24,6 +24,26 @@ type Subtitle struct {
 	Blocks []*Block `json:"blocks"`
 }
 
+// Shift subtitle
+func (s *Subtitle) Shift(d time.Duration) *Subtitle {
+	for _, block := range s.Blocks {
+		startAt := block.StartAt + d
+		if startAt < 0 {
+			startAt, _ = time.ParseDuration("0s")
+		}
+
+		finishAt := block.FinishAt + d
+		if finishAt < 0 {
+			finishAt, _ = time.ParseDuration("0s")
+		}
+
+		block.StartAt = startAt
+		block.FinishAt = finishAt
+	}
+
+	return s
+}
+
 // NewSubtitle returns subtitle instance
 func NewSubtitle() *Subtitle {
 	return &Subtitle{}

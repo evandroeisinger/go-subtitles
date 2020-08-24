@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:00,500
+Lorem ipsum dolor sit amet
+
+2
+00:00:00,500 --> 00:00:01,500
+Consectetur adipiscing elit,
+sed do eiusmod tempor incididunt
+
+3
+00:00:01,500 --> 00:00:02,500
+<i>Ut labore et dolore magna aliqua<i>
+
+4
+00:00:03,000 --> 00:00:04,000
+Ut enim ad minim veniam,
+quis <b>nostrud exercitation</b> ullamco
+
+5
+00:00:04,000 --> 00:00:04,500
+Sed do eiusmod tempor incididunt,
+lorem ipsum dolor sit amet!
+Ut enim ad minim veniam
