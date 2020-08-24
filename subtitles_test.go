@@ -109,8 +109,8 @@ func TestShift(t *testing.T) {
 func TestMerge(t *testing.T) {
 	expectedSubtitle, _ := Load("testdata/sample.srt")
 
-	subtitleA, _ := Load("testdata/splitted_sample_a.srt")
-	subtitleB, _ := Load("testdata/splitted_sample_b.srt")
+	subtitleA, _ := Load("testdata/unmerged_sample_a.srt")
+	subtitleB, _ := Load("testdata/unmerged_sample_b.srt")
 
 	mergedSubtitle, err := Merge(subtitleA, subtitleB)
 
