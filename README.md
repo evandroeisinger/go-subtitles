@@ -12,13 +12,13 @@ go get -u github.com/evandroeisinger/go-subtitles
 ### Available operations:
 - [x] Parsing 
 - [x] Writing
-- [x] Shifting
-- [x] Merging
 - [x] Concatenating
-- [ ] Cuting 
+- [x] Merging
+- [x] Shifting
+- [ ] Cutting 
 - [ ] Slicing
 
-#### Simple Usage
+#### Usage
 ```golang
 // Loads subtitle from file 
 sub, err := subtitles.Load("example.srt")
@@ -28,20 +28,6 @@ if err != nil {
 
 // Writes subtitle to VTT format (writes according to extension format)
 content, _ := subtitles.Write(sub, "example.vtt")
-
-...
-```
-
-#### Shifting
-```golang
-// Loads subtitle from file 
-sub, _ := subtitles.Load("example.srt")
-
-// Shifts up all subtitle blocks timestamp
-sub.Shift(time.ParseDuration("1m30s"))
-
-// Shifts down all subtitle blocks timestamp
-sub.Shift(time.ParseDuration("-1m30s"))
 
 ...
 ```
@@ -66,6 +52,34 @@ sub_b, _ := subtitles.Load("sub_a.srt")
 
 // Merges subtitles preserving timestamps
 sub_ab := subtitles.Merge(sub_a, sub_b)
+
+...
+```
+
+#### Shifting
+```golang
+// Loads subtitle from file 
+sub, _ := subtitles.Load("example.srt")
+
+// Shifts up all subtitle blocks timestamp
+sub.Shift(time.ParseDuration("1m30s"))
+
+// Shifts down all subtitle blocks timestamp
+sub.Shift(time.ParseDuration("-1m30s"))
+
+...
+```
+
+#### Cutting
+```golang
+// Loads subtitle from file 
+sub, _ := subtitles.Load("example.srt")
+
+startAt := time.ParseDuration("1m30s")
+finishAt := time.ParseDuration("1m30s")
+
+// Cuts subtitle preserving blocks
+sub.Cut(startAt, finishAt)
 
 ...
 ```
