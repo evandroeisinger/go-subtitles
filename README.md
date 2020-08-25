@@ -15,7 +15,7 @@ go get -u github.com/evandroeisinger/go-subtitles
 - [x] Concatenating
 - [x] Merging
 - [x] Shifting
-- [ ] Cutting 
+- [x] Cutting 
 - [ ] Slicing
 
 #### Usage
@@ -75,8 +75,8 @@ sub.Shift(time.ParseDuration("-1m30s"))
 // Loads subtitle from file 
 sub, _ := subtitles.Load("example.srt")
 
-startAt := time.ParseDuration("1m30s")
-finishAt := time.ParseDuration("1m30s")
+startAt := time.ParseDuration("30s")
+finishAt := time.ParseDuration("2m")
 
 // Cuts subtitle preserving blocks
 sub.Cut(startAt, finishAt)

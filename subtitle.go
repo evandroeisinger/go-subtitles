@@ -22,8 +22,8 @@ type Subtitle struct {
 }
 
 // Shift subtitle
-func (s *Subtitle) Shift(d time.Duration) *Subtitle {
-	for _, block := range s.Blocks {
+func (sub *Subtitle) Shift(d time.Duration) *Subtitle {
+	for _, block := range sub.Blocks {
 		startAt := block.StartAt + d
 		if startAt < 0 {
 			startAt, _ = time.ParseDuration("0s")
@@ -38,7 +38,38 @@ func (s *Subtitle) Shift(d time.Duration) *Subtitle {
 		block.FinishAt = finishAt
 	}
 
-	return s
+	return sub
+}
+
+// Cut subtitle
+func (sub *Subtitle) Cut(s time.Duration, f time.Duration) *Subtitle {
+	blocks := []*Block{}
+	for _, block := range sub.Blocks {
+		// break if starts after cut duration
+		if block.StartAt >= f {
+			break
+		}
+
+		// skip if starts and finishes before cut duration
+		if block.StartAt <= s && block.FinishAt <= s {
+			continue
+		}
+
+		// fix duration if block ends after cut
+		if block.FinishAt > f {
+			block.FinishAt = f
+		}
+
+		// fix duration if block starts before cut
+		if block.StartAt < s {
+			block.StartAt = s
+		}
+
+		blocks = append(blocks, block)
+	}
+
+	sub.Blocks = blocks
+	return sub
 }
 
 // NewSubtitle returns subtitle instance
