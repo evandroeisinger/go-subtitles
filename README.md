@@ -39,7 +39,7 @@ sub_a, _ := subtitles.Load("sub_a.srt")
 sub_b, _ := subtitles.Load("sub_a.srt")
 
 // Concats subtitles fixing blocks timestamps
-sub_ab := subtitles.Merge(sub_a, sub_b)
+sub_ab := subtitles.Concat(sub_a, sub_b)
 
 ...
 ```
